@@ -41,11 +41,15 @@ async function postMessageToSlack(message) {
 }
 
 exports.handler = async (event, context) => {
-    LIST_IDS.forEach(async (listId) => {
-        const list = await getListDataFromTrello(listId);
-        const message = formatMessage(list);
-        await postMessageToSlack(message);
-    });
+    try {
+        LIST_IDS.forEach(async (listId) => {
+            const list = await getListDataFromTrello(listId);
+            const message = formatMessage(list);
+            await postMessageToSlack(message);
+        });
+    } catch (err) {
+        console.error(err);
+    }
 
     return {
         statusCode: 200,
