@@ -44,8 +44,11 @@ exports.handler = async (event, context) => {
     try {
         LIST_IDS.forEach(async (listId) => {
             const list = await getListDataFromTrello(listId);
+            console.log(list);
             const message = formatMessage(list);
-            await postMessageToSlack(message);
+            console.log(list);
+            const response = await postMessageToSlack(message);
+            console.log(response);
         });
     } catch (err) {
         console.log(err);
