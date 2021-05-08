@@ -1,3 +1,3 @@
-# Slack Utils
+# TN Utils
 
-Lambda functions to automate a few bits and post to slack
+Lambda functions to help automate Tech Nottingham stuff 🛠
