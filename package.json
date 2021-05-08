@@ -1,0 +1,11 @@
+{
+  "name": "slack-utils",
+  "version": "1.0.0",
+  "description": "Lambda functions to automate a few bits and post to slack",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carolgilabert/slack-utils.git"
+  },
+  "author": "Carolina Gilabert",
+  "license": "MIT"
+}
