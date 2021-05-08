@@ -7,5 +7,8 @@
     "url": "git+https://github.com/carolgilabert/slack-utils.git"
   },
   "author": "Carolina Gilabert",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
 }
