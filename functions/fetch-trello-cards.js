@@ -48,7 +48,7 @@ exports.handler = async (event, context) => {
             await postMessageToSlack(message);
         });
     } catch (err) {
-        console.error(err);
+        console.log(err);
     }
 
     return {
