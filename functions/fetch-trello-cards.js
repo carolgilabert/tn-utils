@@ -1,8 +1,7 @@
 const fetch = require("node-fetch");
 
-const TRELLO_KEY = process.env.TRELLO_KEY;
-const TRELLO_TOKEN = process.env.TRELLO_TOKEN;
-const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK;
+const { TRELLO_KEY, TRELLO_TOKEN, SLACK_WEBHOOK } = process.env;
+console.log(process.env);
 
 const LIST_IDS = ["5d07e96a5065c12c1b364e25", "5d51249911a86f2b70b98a60"];
 
@@ -52,12 +51,17 @@ exports.handler = async (event, context) => {
             const response = await postMessageToSlack(message);
             console.log(response);
         });
+        
+        return {
+            statusCode: 200,
+            body: "All done!",
+        };
     } catch (err) {
         console.log(err);
+        return {
+            statusCode: 500,
+            body: "Whoops, something broke :/ "
+        };
     }
 
-    return {
-        statusCode: 200,
-        body: "All done!",
-    };
 };
