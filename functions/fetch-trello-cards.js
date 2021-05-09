@@ -10,12 +10,14 @@ async function getListDataFromTrello(listId) {
     const rawListResponse = await fetch(
         `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
     );
+    console.log('1st trello response', rawListResponse);
     const listJson = await rawListResponse.json();
     const name = listJson.name;
 
     const rawCardResponse = await fetch(
         `https://api.trello.com/1/lists/${listId}/cards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
     );
+    console.log('2nd trello response', rawCardResponse);
     const cards = await rawCardResponse.json();
 
     return { name, cards };
@@ -30,7 +32,7 @@ function formatMessage({ name, cards }) {
 }
 
 async function postMessageToSlack(message) {
-    await fetch(SLACK_WEBHOOK, {
+    return await fetch(SLACK_WEBHOOK, {
         method: "POST",
         body: JSON.stringify({
             text: message,
@@ -46,7 +48,7 @@ exports.handler = async (event, context) => {
             const list = await getListDataFromTrello(listId);
             console.log(list);
             const message = formatMessage(list);
-            console.log(list);
+            console.log(message);
             const response = await postMessageToSlack(message);
             console.log(response);
         });
