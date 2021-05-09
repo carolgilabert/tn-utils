@@ -45,6 +45,7 @@ exports.handler = async (event, context) => {
     try {
         console.log('before foreach');
         await LIST_IDS.forEach(async (listId) => {
+            console.log('inside foreach', listId);
             const list = await getListDataFromTrello(listId);
             console.log(list);
             const message = formatMessage(list);
