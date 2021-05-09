@@ -43,6 +43,7 @@ async function postMessageToSlack(message) {
 
 exports.handler = async (event, context) => {
     try {
+        console.log('before foreach');
         await LIST_IDS.forEach(async (listId) => {
             const list = await getListDataFromTrello(listId);
             console.log(list);
