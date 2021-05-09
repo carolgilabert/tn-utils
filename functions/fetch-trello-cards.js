@@ -8,6 +8,7 @@ const LIST_IDS = ["5d07e96a5065c12c1b364e25", "5d51249911a86f2b70b98a60"];
 async function getListDataFromTrello(listId) {
     try {
         console.log("inside getListDataFromTrello", listId);
+        console.log(`https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`);
         const rawListResponse = await fetch(
             `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
         );
