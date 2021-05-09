@@ -10,5 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "node-fetch": "^2.6.1"
+  },
+  "scripts": {
+    "dev": "netlify dev",
+    "debug": "netlify dev --inspect"
   }
 }
