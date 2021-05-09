@@ -6,21 +6,26 @@ console.log(process.env);
 const LIST_IDS = ["5d07e96a5065c12c1b364e25", "5d51249911a86f2b70b98a60"];
 
 async function getListDataFromTrello(listId) {
-    console.log('inside getListDataFromTrello', listId);
-    const rawListResponse = await fetch(
-        `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
-    );
-    console.log('1st trello response', rawListResponse);
-    const listJson = await rawListResponse.json();
-    const name = listJson.name;
+    try {
+        console.log("inside getListDataFromTrello", listId);
+        const rawListResponse = await fetch(
+            `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
+        );
+        console.log("1st trello response", rawListResponse);
+        const listJson = await rawListResponse.json();
+        const name = listJson.name;
 
-    const rawCardResponse = await fetch(
-        `https://api.trello.com/1/lists/${listId}/cards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
-    );
-    console.log('2nd trello response', rawCardResponse);
-    const cards = await rawCardResponse.json();
+        const rawCardResponse = await fetch(
+            `https://api.trello.com/1/lists/${listId}/cards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
+        );
+        console.log("2nd trello response", rawCardResponse);
+        const cards = await rawCardResponse.json();
 
-    return { name, cards };
+        return { name, cards };
+    } catch (err) {
+        console.log("Error in getListDataFromTrello", err);
+        return new Error("Error in getListDataFromTrello", err);
+    }
 }
 
 function formatMessage({ name, cards }) {
@@ -37,16 +42,17 @@ async function postMessageToSlack(message) {
         body: JSON.stringify({
             text: message,
             username: "Trello Babe",
-            icon_url: "https://a.trellocdn.com/prgb/dist/images/TinyTacoTalking.9128b5432594de9b24d4.png"
-        })
+            icon_url:
+                "https://a.trellocdn.com/prgb/dist/images/TinyTacoTalking.9128b5432594de9b24d4.png",
+        }),
     });
 }
 
 exports.handler = async (event, context) => {
     try {
-        console.log('before foreach');
+        console.log("before foreach");
         await LIST_IDS.forEach(async (listId) => {
-            console.log('inside foreach', listId);
+            console.log("inside foreach", listId);
             const list = await getListDataFromTrello(listId);
             console.log(list);
             const message = formatMessage(list);
@@ -54,7 +60,7 @@ exports.handler = async (event, context) => {
             const response = await postMessageToSlack(message);
             console.log(response);
         });
-        
+
         return {
             statusCode: 200,
             body: "All done!",
@@ -63,8 +69,7 @@ exports.handler = async (event, context) => {
         console.log(err);
         return {
             statusCode: 500,
-            body: "Whoops, something broke :/ "
+            body: "Whoops, something broke :/ ",
         };
     }
-
 };
