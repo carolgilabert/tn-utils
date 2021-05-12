@@ -1,26 +1,19 @@
 const fetch = require("node-fetch");
 
 const { TRELLO_KEY, TRELLO_TOKEN, SLACK_WEBHOOK } = process.env;
-console.log(process.env);
-
-const LIST_IDS = ["5d07e96a5065c12c1b364e25", "5d51249911a86f2b70b98a60"];
 
 async function getListDataFromTrello(listId) {
-    console.log("inside getListDataFromTrello", listId);
-    console.log(
-        `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
-    );
     const rawListResponse = await fetch(
         `https://api.trello.com/1/lists/${listId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
     );
-    console.log("1st trello response", rawListResponse);
+
     const listJson = await rawListResponse.json();
     const name = listJson.name;
 
     const rawCardResponse = await fetch(
         `https://api.trello.com/1/lists/${listId}/cards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`
     );
-    console.log("2nd trello response", rawCardResponse);
+
     const cards = await rawCardResponse.json();
 
     return { name, cards };
@@ -48,26 +41,21 @@ async function postMessageToSlack(message) {
 
 exports.handler = async (event, context) => {
     try {
-        console.log("before foreach");
-        await LIST_IDS.forEach(async (listId) => {
-            console.log("inside foreach", listId);
-            const list = await getListDataFromTrello(listId);
-            console.log(list);
-            const message = formatMessage(list);
-            console.log(message);
-            const response = await postMessageToSlack(message);
-            console.log(response);
-        });
+        const listId = event.queryStringParameters.listId;
+        const list = await getListDataFromTrello(listId);
+        const message = formatMessage(list);
+
+        await postMessageToSlack(message);
 
         return {
             statusCode: 200,
             body: "All done!",
         };
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return {
             statusCode: 500,
-            body: "Whoops, something broke :/ ",
+            body: "Whoops, something broke -> ", err,
         };
     }
 };
