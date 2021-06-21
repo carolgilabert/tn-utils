@@ -7,10 +7,7 @@ async function postMessageToSlack(message) {
     return await fetch(SLACK_WEBHOOK_WIT, {
         method: "POST",
         body: JSON.stringify({
-            text: message,
-            username: "Women in Tech Nottingham",
-            icon_url:
-                "https://pbs.twimg.com/profile_images/913380298829844481/YvPcjPlE_400x400.jpg",
+            text: message
         }),
     });
 }
